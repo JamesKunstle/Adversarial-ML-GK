@@ -1,24 +1,22 @@
+"""
+    Imports
+"""
 import torch as nn 
 import torch.nn.functional as F
-from torch.autograd import Variable
-from torch.nn import Linear, ReLU, CrossEntropyLoss, Sequential, Conv2d, MaxPool2d, Module, Softmax, BatchNorm2d, Dropout
-from torch.optim import Adam, SGD
 
 from tqdm import trange
-import numpy as np
-import pandas as pd
-from sklearn.metrics import accuracy_score
 
 import sys
 sys.path.append("/Users/jameskunstle/Documents/dev/Adversarial-ML-GK/loaders")
 sys.path.append("/Users/jameskunstle/Documents/dev/Adversarial-ML-GK/models")
-
 from mnist_loader import MNIST_Dataset_Loader
 from base_model import Train_Net_MNIST, Net
 
 import matplotlib.pyplot as plt
 
-
+"""
+    Attack Class
+"""
 class SimBA_Attack(object):
 
     def __init__(self, model=None ):
@@ -87,14 +85,23 @@ class SimBA_Attack(object):
 
 if __name__ == "__main__":
 
-    # Define the model architecture
+    print("Loading Model")
+    # Instantiate the model to be trained, convert internal datatypes to floats.
     model = Net().float()
 
+    # Instantiate training object
+    training_object = Train_Net_MNIST()
+
+    print("Downloading data.")
+    # Load the dataset from the loader.
+    training_object.load_dataset( loader = MNIST_Dataset_Loader )
+
+    print("Training model.")
     # Train the model
-    training_object = Train_Net_MNIST(ds_loader = MNIST_Dataset_Loader)
     training_object.train_net_model( model )
 
     # Run an attack on the model
+    print("Starting SimBA attack")
     attack = SimBA_Attack(model=model)
     x_pert, history, x_pert_probs = attack.simba( training_object.x_test[0], training_object.y_test[0] )
 
@@ -105,3 +112,4 @@ if __name__ == "__main__":
     plt.show()
 
     print( x_pert_probs * 100 )
+    

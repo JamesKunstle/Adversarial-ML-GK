@@ -3,14 +3,17 @@
 """
 import torch as nn 
 import torch.nn.functional as F
-from torch.autograd import Variable
-from torch.nn import Linear, ReLU, CrossEntropyLoss, Sequential, Conv2d, MaxPool2d, Module, Softmax, BatchNorm2d, Dropout
-from torch.optim import Adam, SGD
+from torch.nn import Linear, Conv2d, Module
+from torch.optim import Adam
 
 from tqdm import trange
 import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score
+
+import sys
+sys.path.append("/Users/jameskunstle/Documents/dev/Adversarial-ML-GK/loaders")
+from mnist_loader import MNIST_Dataset_Loader
 
 
 
@@ -74,6 +77,7 @@ class Net( Module ):
         #activated output classications
         #loss wasn't changing until I changed this.
         #return F.log_softmax( x, dim=1)
+        
         return x #for the sake of generality the output should be logits.
 
 """
@@ -82,28 +86,39 @@ class Net( Module ):
 """
 class Train_Net_MNIST( object ):
 
-    def __init__(self, ds_loader, batch_size=30, epochs=5, learning_rate=0.0001):
+    def __init__(self, batch_size=30, epochs=5, learning_rate=0.0001):
 
-        self.loader = ds_loader
-        self.loaded = False
+        self.loader = None
         self.BATCH_SIZE = batch_size
         self.EPOCHS = epochs
         self.LEARNING_RATE = learning_rate
         self.LOSS_HISTORY = None
 
-    def load_dataset(self):
+        # Local references to loaded data.        
+        self.x_train = None
+        self.y_train = None
+        self.x_test = None
+        self.y_test =  None
+
+    def load_dataset(self, loader):
+        if self.loader is None:
+            if loader is None:
+                print("Error: Loader cannot be none.")
+                return
+            self.loader = loader
+
+
         mnist_loader = self.loader()
         self.x_train, self.y_train, self.x_test, self.y_test = mnist_loader.load_mnist()
 
     def train_net_model(self, model):
 
+        self.model = model
         self.LOSS_HISTORY = []
 
-        self.model = model
-
-        if self.loaded == False:
-            self.load_dataset()
-            self.loaded = True
+        if self.loader is None:
+            print("ERROR: No dataset loaded and no loader specified.")
+            return
 
         optimizer = Adam( model.parameters(), lr=self.LEARNING_RATE )
 
@@ -136,12 +151,16 @@ class Train_Net_MNIST( object ):
             print( f"Epoch done: { epoch + 1 } / { self.EPOCHS }, accuracy: {accuracy_score( self.y_test, predictions )}", flush=True)
 
 if __name__ == "__main__":
-    import sys
-    sys.path.append("/Users/jameskunstle/Documents/dev/Adversarial-ML-GK/loaders")
 
-    from mnist_loader import MNIST_Dataset_Loader
-
+    # Instantiate the model to be trained, convert internal datatypes to floats.
     model = Net().float()
-    training_object = Train_Net_MNIST(ds_loader = MNIST_Dataset_Loader)
 
+    # Instantiate training object
+    training_object = Train_Net_MNIST()
+
+    # Load the dataset from the loader.
+    training_object.load_dataset( loader = MNIST_Dataset_Loader )
+
+    # Train the model
     training_object.train_net_model( model )
+    
