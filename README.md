@@ -12,13 +12,13 @@ The base data loader, model training api, and attack api are all runnable as dem
 
 ## Contribution Details
 When contributing to this repo, please~
-    (1) Fork this repo.
-    (2) Set this repo as upstream and your own fork as origin.
-    (3) Develop features or improvements in a new branch.
-    (4) Rebase upstream changes onto your branch and test thoroughly.
-    (5) Make PR's from your forked development branch.
+1. Fork this repo.
+2. Set this repo as upstream and your own fork as origin.
+3. Develop features or improvements in a new branch.
+4. Rebase upstream changes onto your branch and test thoroughly.
+5.  Make PR's from your forked development branch.
 
-    ^^ This workflow makes it very easy to contribute even with rapidly changing, often optimized API's.
+^^ This workflow makes it very easy to contribute even with rapidly changing, often optimized API's.
 
 All experiments must adhere to the "XXX-Experiment-Title.py" format inside of the "experiments" folder. You can see how to reference the repo's functionality via the sys.path.append interface. An example of this would be:
     "000-test-experiment.py"
