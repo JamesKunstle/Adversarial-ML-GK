@@ -1,0 +1,5 @@
+000-test-experiment.py:
+    This is an example of the way that details about an experiment should be formatted.
+    One indent after naming the experiment file is sufficient. 
+    If your experiment requires its own subdirectory, please list the experiment number
+    followed by the subdirectory name sans ".py"
