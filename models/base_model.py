@@ -12,8 +12,18 @@ import pandas as pd
 from sklearn.metrics import accuracy_score
 
 import sys
-sys.path.append("/Users/jameskunstle/Documents/dev/Adversarial-ML-GK/loaders")
-from mnist_loader import MNIST_Dataset_Loader
+import os
+
+WORKING_PATH = os.getcwd()
+
+PATH = os.path.abspath( os.path.dirname(os.path.abspath(__file__)) )
+os.chdir(PATH)
+os.chdir("../")
+
+REPO_PATH = os.path.abspath( os.getcwd() )
+os.chdir( WORKING_PATH )
+
+sys.path.append( REPO_PATH + "/loaders" )
 
 
 
@@ -77,7 +87,7 @@ class Net( Module ):
         #activated output classications
         #loss wasn't changing until I changed this.
         #return F.log_softmax( x, dim=1)
-        
+
         return x #for the sake of generality the output should be logits.
 
 """

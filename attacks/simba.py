@@ -7,8 +7,19 @@ import torch.nn.functional as F
 from tqdm import trange
 
 import sys
-sys.path.append("/Users/jameskunstle/Documents/dev/Adversarial-ML-GK/loaders")
-sys.path.append("/Users/jameskunstle/Documents/dev/Adversarial-ML-GK/models")
+import os
+
+WORKING_PATH = os.getcwd()
+
+PATH = os.path.abspath( os.path.dirname(os.path.abspath(__file__)) )
+os.chdir(PATH)
+os.chdir("../")
+
+REPO_PATH = os.path.abspath( os.getcwd() )
+os.chdir( WORKING_PATH )
+
+sys.path.append( REPO_PATH + "/loaders" )
+sys.path.append( REPO_PATH + "/models")
 from mnist_loader import MNIST_Dataset_Loader
 from base_model import Train_Net_MNIST, Net
 
