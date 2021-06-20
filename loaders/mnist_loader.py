@@ -2,7 +2,10 @@
     Imports
 """
 import keras
-from keras.datasets import mnist
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import fetch_openml
+import torch.nn as nn
+import torch
 import numpy as np
 
 """
@@ -10,10 +13,13 @@ import numpy as np
 """
 class MNIST_Dataset_Loader( object ):
 
-    def __init__(self):
+    def __init__(self, torch=True):
         self.IMG_ROWS = 28
         self.IMG_COLS = 28
         self.NUM_CLASSES = 10
+        self.BATCH_SIZE = 30
+        self.SPLIT = 0.3
+        self.torch = torch
         
         self.x_train = None
         self.y_train = None
@@ -28,27 +34,47 @@ class MNIST_Dataset_Loader( object ):
                 Returns the converted / formatted matrices and the shape
                 of the X matrices.
             """
-            x_train = x_train.reshape(x_train.shape[0], self.IMG_ROWS, self.IMG_COLS, 1)
-            x_test = x_test.reshape(x_test.shape[0], self.IMG_ROWS, self.IMG_COLS, 1 )
-                
-            x_train = x_train.astype("float32") / 255
-            x_test = x_test.astype("float32") / 255
-            
-            y_train = keras.utils.to_categorical(y_train, self.NUM_CLASSES)
-            y_test = keras.utils.to_categorical(y_test, self.NUM_CLASSES)
+            X_TRAIN_SHAPE = x_train.shape[0]
+            X_TEST_SHAPE = x_test.shape[0]
 
-            self.x_train = x_train
+            x_train = np.array(x_train)
+            x_train = x_train.reshape( X_TRAIN_SHAPE, 1, self.IMG_ROWS, self.IMG_COLS )
+            
+            y_train = np.array(y_train)
+            y_train = y_train.astype( int )
+            
+            x_test = np.array(x_test)
+            x_test = x_test.reshape( X_TEST_SHAPE, 1, self.IMG_ROWS, self.IMG_COLS )
+            
+            y_test = np.array(y_test)
+            y_test = y_test.astype( int )
+            
+            """
+            Convert to torch format for nn
+            """
+            x_train = torch.from_numpy( x_train )
+            y_train = torch.from_numpy( y_train )
+            
+            x_test = torch.from_numpy( x_test )
+            y_test = torch.from_numpy( y_test )
+
+            self.x_train = x_train / 255.0
             self.y_train = y_train
-            self.x_test = x_test
+            self.x_test = x_test / 255.0
             self.y_test =  y_test
 
-            return x_train, y_train, x_test, y_test
+            return self.x_train, self.y_train, self.x_test, self.y_test
 
     def load_mnist(self, preprocess = True):
         """
             Data Loading
         """
-        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+        X, y = fetch_openml('mnist_784', version=1, return_X_y=True)
+
+        x_train, x_test, y_train, y_test = train_test_split(X, 
+                                                            y, 
+                                                            test_size=self.SPLIT, 
+                                                            random_state=42)
 
         if preprocess:
             x_train, y_train, x_test, y_test = self.preprocess_mnist(x_train, y_train, x_test, y_test)
