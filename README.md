@@ -1,16 +1,16 @@
 == please contact jkunstle@bu.edu for questions regarding this repo. This README is an open project ==
 
-##Welcome
+## Welcome
 Thank you so much for visiting this project! 
 
-##Introduction
+## Introduction
 The purpose of this repository is to make it easier to share our work with other collaborators. There's a limitless supply of things to do, and centralizing the efforts of the project in one repository, and maintaining consistent quality, is essential to making consistent progress. An open source collaboration strategy makes sense.
 
-##Technical Details
+## Technical Details
 The base data loader, model training api, and attack api are all runnable as demos and their essential functionality is documented in their respective main() methods. 
 
 
-##Contribution Details
+## Contribution Details
 When contributing to this repo, please~
     (1) Fork this repo.
     (2) Set this repo as upstream and your own fork as origin.
