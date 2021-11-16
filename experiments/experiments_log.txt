@@ -20,3 +20,20 @@
     The experiment runs SimBA again on all test data, and then aggregates the perturbations generated per 
     ground truth class into one perturbation heatmap per class, which displays the aggregated frequencies of
     where perturbations were created when making a misclassified image.
+
+
+002-cam-gaussian-normal.py:
+    Initial note: this experiment performs best (with plotting) when split up in a notebook.
+    However, the python file will still run fine.
+
+    This experiment uses the simple classification model found in 'cam_simplenet_model.py'. 
+    Using that simple NN that classifies the Fashion MNIST dataset with around 80% accuracy,
+    the experiment generates a confusion matrix outlining how the model performs in classifying 
+    images that had gaussian noise applied to every pixel. As you can see in the matrix generated,
+    the model performs well on images affected with gaussian noise.
+
+    Next, I tried to create random perturbations in a centered distribution of the image. 
+    This was just due to my intuition, that those areas would be more important for generating 
+    effective perturbations. Here you can see the different parameters I tried: number of indexes I accessed,
+    deltas (change to those pixel values). I tried several different values for both, but the results 
+    were not very effective. 
