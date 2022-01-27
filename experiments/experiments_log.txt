@@ -37,3 +37,35 @@
     effective perturbations. Here you can see the different parameters I tried: number of indexes I accessed,
     deltas (change to those pixel values). I tried several different values for both, but the results 
     were not very effective. 
+
+003-cam-shapley-0.ipynb:
+    Note that this is a notebook file not a python file as I was previously uploading!
+
+    This experiment uses a CNN model trained in 'cam_training_fashion_mnist_cnn.ipynb' and stored as 
+    'mnist_fashion_CNN.pt' in the models folder. With the CNN and the Fashion MNist dataset it is trained on, 
+    we generate shapley values for a test set of only pants images using the shap python module.
+
+    From there, a heatmap of the shapley values corresponding to the pants class is generated, and used to 
+    generate perturbations in the locations of the X highest pixel locations of aggregated shapley values. 
+    The model is then tested to see how it performs on the various perturbed images.
+
+    Later, perturbations were generated inthe locations of X random pixel locations, to provide a benchmark to 
+    compare the previous results to. The random pixel locations performed better.
+
+004-cam-shapley-1.ipynb:
+    This experiment uses a CNN model trained in 'cam_training_fashion_mnist_cnn.ipynb' and stored as 
+    'mnist_fashion_CNN.pt' in the models folder. With the CNN and the Fashion MNist dataset it is trained on, 
+    we generate shapley values for a test set of only pants images using the shap python module.
+    
+    From there, a heatmap of the shapley values corresponding to the pants class is generated, and used to 
+    generate perturbations in the locations of the X LOWEST pixel locations of aggregated shapley values. 
+    The model is then tested to see how it performs on the various perturbed images.
+
+005-cam-shapley-2.ipynb:
+    This experiment uses a CNN model trained in 'cam_training_fashion_mnist_cnn.ipynb' and stored as 
+    'mnist_fashion_CNN.pt' in the models folder. With the CNN and the Fashion MNist dataset it is trained on, 
+    we generate shapley values for a test set of only pants images using the shap python module.
+    
+    From there, a heatmap of the shapley values corresponding to the SNEAKERS class is generated, and used to 
+    generate perturbations in the locations of the X highest pixel locations of aggregated shapley values. 
+    The model is then tested to see how it performs on the various perturbed images.
